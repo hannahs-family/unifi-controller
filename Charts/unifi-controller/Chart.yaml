@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+appVersion: 5.10.25
+name: unifi-controller
+description: Ubiquiti UniFi Network Management Controller
+version: 1.0.0
+keywords:
+  - ubiquiti
+  - ubnt
+  - unifi
+  - mongodb
+home: https://github.com/hannahs-family/unifi-controller
+icon: https://blog.ubnt.com/wp-content/uploads/2016/10/unifi-app-logo.png
+sources:
+  - https://github.com/hannahs-family/unifi-controller
+maintainers:
+  - name: jbhannah
+    email: jesse@jbhannah.net

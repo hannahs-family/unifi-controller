@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "unifi-controller.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "unifi-controller.name" . }}
+    helm.sh/chart: {{ include "unifi-controller.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: 1
+  strategy:
+    type: {{ .Values.strategyType }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "unifi-controller.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "unifi-controller.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- if .Values.podAnnotations }}
+      annotations:
+        {{- range $key, $value := .Values.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+      {{- end }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: https-gui
+              containerPort: 8443
+              protocol: TCP
+            - name: controller
+              containerPort: 8080
+              protocol: TCP
+            - name: discovery
+              containerPort: 10001
+              protocol: UDP
+            - name: stun
+              containerPort: 3478
+              protocol: UDP
+          {{- if not .Values.runAsRoot }}
+          securityContext:
+            capabilities:
+              add:
+                - SETFCAP
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /status
+              port: https-gui
+              scheme: HTTPS
+            initialDelaySeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /status
+              port: https-gui
+              scheme: HTTPS
+            initialDelaySeconds: 15
+          env:
+            - name: TZ
+              value: "{{ .Values.timezone }}"
+            - name: UNIFI_UID
+              value: "{{ .Values.UID }}"
+            - name: UNIFI_GID
+              value: "{{ .Values.GID }}"
+            - name: DB_URI
+              value: "mongodb://{{ if index .Values "mongodb-replicaset" "enabled" }}{{ include "unifi-controller.mongodb-replicaset-uri" . }}{{- else }}{{ .Values.mongodb.db.hosts | join "," }}{{- end }}/{{ .Values.mongodb.db.name }}"
+            - name: STATDB_URI
+              value: "mongodb://{{ if index .Values "mongodb-replicaset" "enabled" }}{{ include "unifi-controller.mongodb-replicaset-uri" . }}{{- else }}{{ .Values.mongodb.statdb.hosts | join "," }}{{- end }}/{{ .Values.mongodb.statdb.name }}"
+            - name: DB_NAME
+              value: "{{ .Values.mongodb.db.name }}"
+          volumeMounts:
+            - mountPath: /unifi
+              name: unifi
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+      volumes:
+        - name: unifi
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "unifi-controller.fullname" . }}{{- end }}
+        {{- else }}
+          emptyDir: {}
+        {{ end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

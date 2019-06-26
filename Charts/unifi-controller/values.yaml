@@ -1,0 +1,121 @@
+---
+image:
+  repository: hannahsfamily/unifi-controller
+  tag: 5.10.25
+  pullPolicy: IfNotPresent
+
+unifiedService:
+  enabled: false
+  type: ClusterIP
+  labels: {}
+  annotations: {}
+  nodePort:
+  loadBalancerIP:
+  loadBalancerSourceRanges:
+  externalTrafficPolicy: Cluster
+
+guiService:
+  type: ClusterIP
+  labels: {}
+  annotations: {}
+  port: 8443 # TCP
+  nodePort:
+  loadBalancerIP:
+  loadBalancerSourceRanges:
+  externalTrafficPolicy: Cluster
+
+controllerService:
+  type: ClusterIP
+  labels: {}
+  annotations: {}
+  port: 8080 # TCP
+  nodePort:
+  loadBalancerIP:
+  loadBalancerSourceRanges:
+  externalTrafficPolicy: Cluster
+
+stunService:
+  type: NodePort
+  labels: {}
+  annotations: {}
+  port: 3478 # UDP
+  nodePort:
+  loadBalancerIP:
+  loadBalancerSourceRanges:
+  externalTrafficPolicy: Cluster
+
+discoveryService:
+  type: NodePort
+  labels: {}
+  annotations: {}
+  port: 10001 # UDP
+  nodePort:
+  loadBalancerIP:
+  loadBalancerSourceRanges:
+  externalTrafficPolicy: Cluster
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  path: /
+  hosts:
+    - unifi.local
+  tls: []
+    # - secretName: unifi-controller-tls
+    #   hosts:
+    #     - unifi.local
+
+timezone: UTC
+
+persistence:
+  enabled: true
+  # storageclass: "-"
+  # existingClaim: existing-pvc-name
+  accessMode: ReadWriteOnce
+  size: 5Gi
+
+resources:
+#   limits:
+#     cpu: 100m
+#     memory: 128Mi
+#   requests:
+#     cpu: 100m
+#     memory: 128Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+podAnnotations: {}
+
+# Configures the MongoDB connection for the UniFi Controller. If you install
+# the mongodb-replicaset Helm chart as a dependency of this chart, these values
+# will be set automatically.
+mongodb:
+  db:
+    name: unifi
+#     username: ""
+#     password: ""
+#     # When connecting to a MongoDB replica set, list the hostnames and port
+#     # numbers of all hosts in the replica set.
+#     hosts:
+#       - mongodb-replicaset-0.mongodb-replicaset.default.svc.cluster.local
+#       - mongodb-replicaset-1.mongodb-replicaset.default.svc.cluster.local
+#       - mongodb-replicaset-2.mongodb-replicaset.default.svc.cluster.local
+  statdb:
+    name: unifi_stat
+#     username: ""
+#     password: ""
+#     # When connecting to a MongoDB replica set, list the hostnames and port
+#     # numbers of all hosts in the replica set.
+#     hosts:
+#       - mongodb-replicaset-0.mongodb-replicaset.default.svc.cluster.local
+#       - mongodb-replicaset-1.mongodb-replicaset.default.svc.cluster.local
+#       - mongodb-replicaset-2.mongodb-replicaset.default.svc.cluster.local
+
+# Configures the MongoDB replica set installation. Include any value overrides
+# for this chart here.
+mongodb-replicaset:
+  enabled: true
+  replicas: 3
