@@ -27,6 +27,8 @@ spec:
         {{- end }}
       {{- end }}
     spec:
+      securityContext:
+        fsGroup: 998
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -44,12 +46,6 @@ spec:
             - name: stun
               containerPort: 3478
               protocol: UDP
-          {{- if not .Values.runAsRoot }}
-          securityContext:
-            capabilities:
-              add:
-                - SETFCAP
-          {{- end }}
           livenessProbe:
             httpGet:
               path: /status
@@ -76,12 +72,19 @@ spec:
             - name: DB_NAME
               value: "{{ .Values.mongodb.db.name }}"
           volumeMounts:
-            - mountPath: /unifi
-              name: unifi
+            - mountPath: /unifi/data
+              name: unifi-data
+              subPath: data
+            - mountPath: /unifi/logs/remote
+              name: unifi-data
+              subPath: logs/remote
+            - mountPath: /unifi/run
+              name: unifi-data
+              subPath: run
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       volumes:
-        - name: unifi
+        - name: unifi-data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
             claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "unifi-controller.fullname" . }}{{- end }}
