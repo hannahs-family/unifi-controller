@@ -61,10 +61,6 @@ spec:
           env:
             - name: TZ
               value: "{{ .Values.timezone }}"
-            - name: UNIFI_UID
-              value: "{{ .Values.UID }}"
-            - name: UNIFI_GID
-              value: "{{ .Values.GID }}"
             - name: DB_URI
               value: "mongodb://{{ if index .Values "mongodb-replicaset" "enabled" }}{{ include "unifi-controller.mongodb-replicaset-uri" . }}{{- else }}{{ .Values.mongodb.db.hosts | join "," }}{{- end }}/{{ .Values.mongodb.db.name }}"
             - name: STATDB_URI
