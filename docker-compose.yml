@@ -2,14 +2,14 @@ version: "3"
 
 services:
   mongo:
-    image: mongo:3.6
+    image: mongo:latest
     networks:
       - unifi
     restart: always
     volumes:
       - db:/data/db
   controller:
-    image: hannahsfamily/unifi-controller:${TAG:-5.10.25}
+    image: hannahsfamily/unifi-controller:latest
     depends_on:
       - mongo
     environment:
@@ -28,13 +28,15 @@ services:
       - 10001:10001/udp # AP discovery
     restart: always
     volumes:
-      - data:/var/lib/unifi
-      - log:/var/log/unifi
+      - data:/unifi/data
+      - log:/unifi/log/remote
+      - run:/unifi/run
 
 volumes:
   db: {}
   data: {}
   log: {}
+  run: {}
 
 networks:
   unifi: {}
