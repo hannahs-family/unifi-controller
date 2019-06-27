@@ -12,7 +12,7 @@ unifiedService:
   nodePort:
   loadBalancerIP:
   loadBalancerSourceRanges:
-  externalTrafficPolicy: Cluster
+  # externalTrafficPolicy: Cluster
 
 guiService:
   type: ClusterIP
@@ -22,7 +22,7 @@ guiService:
   nodePort:
   loadBalancerIP:
   loadBalancerSourceRanges:
-  externalTrafficPolicy: Cluster
+  # externalTrafficPolicy: Cluster
 
 controllerService:
   type: ClusterIP
@@ -32,7 +32,7 @@ controllerService:
   nodePort:
   loadBalancerIP:
   loadBalancerSourceRanges:
-  externalTrafficPolicy: Cluster
+  # externalTrafficPolicy: Cluster
 
 stunService:
   type: NodePort
@@ -42,7 +42,7 @@ stunService:
   nodePort:
   loadBalancerIP:
   loadBalancerSourceRanges:
-  externalTrafficPolicy: Cluster
+  # externalTrafficPolicy: Cluster
 
 discoveryService:
   type: NodePort
@@ -52,7 +52,7 @@ discoveryService:
   nodePort:
   loadBalancerIP:
   loadBalancerSourceRanges:
-  externalTrafficPolicy: Cluster
+  # externalTrafficPolicy: Cluster
 
 ingress:
   enabled: false
