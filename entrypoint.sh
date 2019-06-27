@@ -75,6 +75,10 @@ for key in "${!settings[@]}"; do
     confSet "$confFile" "$key" "${settings[$key]}"
 done
 
+if [ "${LOG_TO_STDOUT}" == true ]; then
+    ln -s /dev/stdout ${LOG_DIR}/server.log
+fi
+
 UNIFI_CMD="java ${JVM_OPTS} -jar ${BASE_DIR}/lib/ace.jar start"
 
 if [[ "${@}" == "unifi" ]]; then

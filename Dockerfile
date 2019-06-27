@@ -6,6 +6,7 @@ ENV BASE_DIR=/usr/lib/unifi \
     LOG_DIR=/unifi/logs \
     RUN_DIR=/unifi/run \
     PIDFILE=/unifi/run/unifi.pid \
+    LOG_TO_STDOUT=true \
     UNIFI_GID=998 \
     UNIFI_UID=998
 
