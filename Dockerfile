@@ -18,6 +18,7 @@ RUN apt-get update \
     curl \
     jsvc \
     libcap2 \
+    procps \
     && rm -rf /var/lib/apt/lists/*
 
 RUN addgroup --gid ${UNIFI_GID} --system unifi \
