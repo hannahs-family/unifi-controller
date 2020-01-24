@@ -5,6 +5,8 @@ verify_ssl = true
 
 [dev-packages]
 yapf = "*"
+pylint = "*"
+flake8 = "*"
 
 [packages]
 invoke = "*"
