@@ -8,7 +8,7 @@ ARCHITECTURES = [
 
 DOCKER_REPOSITORY = "hannahsfamily/unifi-controller"
 
-STABLE_VERSION = "5.10.25"
+STABLE_VERSION = "5.12.35"
 IMAGE_VERSION = "1"
 
 

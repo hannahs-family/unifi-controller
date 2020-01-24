@@ -9,8 +9,8 @@ containered environment.
 
 The published Docker images are built for Linux on x86_64, ARM v7 (32-bit),
 and ARM v8 (64-bit) architectures, and tagged with the installed version of the
-UniFi Controller, both per-architecture (e.g. `5.10.25-amd64`) and as a
-multi-architecture manifest (e.g. `5.10.25`). The controller's server logs are
+UniFi Controller, both per-architecture (e.g. `5.12.35-1-amd64`) and as a
+multi-architecture manifest (e.g. `5.12.35-1`). The controller's server logs are
 redirected to standard out by default. No embedded MongoDB database is
 included; one must be started separately, and its connection strings passed
 into the container with the `DB_URI` and `STATDB_URI` environment variables,
@@ -50,7 +50,7 @@ in volumes on the host machine.
 
 You can pass a UniFi Controller version number:
 
-    inv build -v 5.10.25
+    inv build -v 5.12.35
 
 or a Docker repository for tagging:
 

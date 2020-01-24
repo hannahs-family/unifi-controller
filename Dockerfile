@@ -36,7 +36,7 @@ VOLUME [ "/unifi" ]
 
 EXPOSE 6789/tcp 8080/tcp 8443/tcp 8880/tcp 8843/tcp 3478/udp
 
-ARG version=5.10.25
+ARG version=5.12.35
 RUN cd / \
     && curl -O https://dl.ubnt.com/unifi/${version}/unifi_sysvinit_all.deb \
     && dpkg --ignore-depends=mongodb-server,java8-runtime-headless -i unifi_sysvinit_all.deb \
